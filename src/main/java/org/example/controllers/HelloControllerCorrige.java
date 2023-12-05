@@ -1,5 +1,7 @@
-package org.example;
+package org.example.controllers;
 
+
+import org.example.services.helloworld.HelloWorld;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

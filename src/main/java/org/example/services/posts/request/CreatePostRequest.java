@@ -1,4 +1,4 @@
-package org.example.posts.request;
+package org.example.services.posts.request;
 
 public class CreatePostRequest {
     private String content;

@@ -1,4 +1,4 @@
-package org.example;
+package org.example.services.posts;
 
 import java.util.Date;
 
