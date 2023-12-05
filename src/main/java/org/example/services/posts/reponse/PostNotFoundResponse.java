@@ -1,4 +1,4 @@
-package org.example.posts.reponse;
+package org.example.services.posts.reponse;
 
 public class PostNotFoundResponse {
 

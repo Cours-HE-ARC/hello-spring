@@ -1,4 +1,4 @@
-package org.example;
+package org.example.services.helloworld;
 
 public class HelloWorld {
 
