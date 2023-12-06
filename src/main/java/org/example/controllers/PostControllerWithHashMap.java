@@ -1,14 +1,14 @@
 package org.example.controllers;
 
 
-import org.example.services.todos.PostsService;
+import org.example.services.posts.PostsService;
 import org.example.services.posts.Post;
 import org.example.services.posts.reponse.DeletePostsResponse;
 import org.example.services.posts.reponse.SavePostsResponse;
 import org.example.services.posts.reponse.UpdatePostsResponse;
-import org.example.services.todos.impl.DeleteAction;
-import org.example.services.todos.impl.SaveAction;
-import org.example.services.todos.impl.UpdateAction;
+import org.example.services.posts.impl.DeleteAction;
+import org.example.services.posts.impl.SaveAction;
+import org.example.services.posts.impl.UpdateAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -77,7 +77,7 @@ public class PostControllerWithHashMap {
 
         UpdatePostsResponse response;
 
-        UpdateAction updateAction = postsService.updatePost(post);
+        UpdateAction updateAction = postsService.updatePost(Long.valueOf(id),post);
 
         response = UpdatePostsResponse.response(id, updateAction.getMessage());
 

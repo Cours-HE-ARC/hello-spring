@@ -1,4 +1,4 @@
-package org.example.services.todos.impl;
+package org.example.services.posts.impl;
 
 public class SaveAction {
 

@@ -1,10 +1,9 @@
-package org.example.services.todos;
+package org.example.services.posts;
 
 
-import org.example.services.posts.Post;
-import org.example.services.todos.impl.DeleteAction;
-import org.example.services.todos.impl.SaveAction;
-import org.example.services.todos.impl.UpdateAction;
+import org.example.services.posts.impl.DeleteAction;
+import org.example.services.posts.impl.SaveAction;
+import org.example.services.posts.impl.UpdateAction;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +18,7 @@ public interface PostsService {
 
     DeleteAction deletePost(Post post);
 
-    UpdateAction updatePost(Post post);
+    UpdateAction updatePost(Long id,Post post);
 
     SaveAction savePost(Post post);
 }
