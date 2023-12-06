@@ -20,7 +20,7 @@ public class SavePostsResponse {
     }
 
     public static SavePostsResponse response(String id, String message){
-        return new SavePostsResponse(id, message);
+        return new SavePostsResponse(message,id);
     }
 
 }

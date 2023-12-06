@@ -6,9 +6,9 @@ import org.example.services.posts.Post;
 import org.example.services.posts.reponse.DeletePostsResponse;
 import org.example.services.posts.reponse.SavePostsResponse;
 import org.example.services.posts.reponse.UpdatePostsResponse;
-import org.example.services.posts.impl.DeleteAction;
+import org.example.services.posts.impl.DeleteResult;
 import org.example.services.posts.impl.SaveAction;
-import org.example.services.posts.impl.UpdateAction;
+import org.example.services.posts.impl.UpdateResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +19,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("posts")
-public class PostControllerWithHashMap {
+public class PostController {
 
     @Autowired
     PostsService postsService;
@@ -36,10 +36,11 @@ public class PostControllerWithHashMap {
         Optional<Post> post = postsService.getPostDetail(Long.valueOf(id));
 
         if(post.isPresent()){
-            return ResponseEntity.ok(post.get());
+            return ResponseEntity.ok(post);
         }else{
             return ResponseEntity.notFound().build();
         }
+
 
     }
 
@@ -49,7 +50,7 @@ public class PostControllerWithHashMap {
         Optional<Post> post = postsService.getPostDetailByUsername(username);
 
         if(post.isPresent()){
-            return ResponseEntity.ok(post.get());
+            return ResponseEntity.ok(post);
         }else{
             return ResponseEntity.notFound().build();
         }
@@ -59,14 +60,12 @@ public class PostControllerWithHashMap {
     @DeleteMapping("/{id}")
     public ResponseEntity<DeletePostsResponse> deletePost(@PathVariable String id){
 
-        System.out.println("put/id" + id);
+        System.out.println("delete/id" + id);
 
         DeletePostsResponse response;
-
-        Post toDelete = postsService.getPostDetail(Long.valueOf(id)).get();
-
-        DeleteAction deleteAction = postsService.deletePost(toDelete);
-        response = DeletePostsResponse.response(deleteAction.getMessage(), id);
+        DeleteResult deleteResult = postsService.deletePost(id);
+        response = DeletePostsResponse.response(deleteResult.getMessage(), id);
+        //TODO 404 is post doesn't exist ?
         return ResponseEntity.ok(response);
     }
 
@@ -77,9 +76,9 @@ public class PostControllerWithHashMap {
 
         UpdatePostsResponse response;
 
-        UpdateAction updateAction = postsService.updatePost(Long.valueOf(id),post);
+        UpdateResult updateResult = postsService.updatePost(Long.valueOf(id),post);
 
-        response = UpdatePostsResponse.response(id, updateAction.getMessage());
+        response = UpdatePostsResponse.response(updateResult.getMessage(),id);
 
         return ResponseEntity.ok(response);
     }
@@ -89,8 +88,9 @@ public class PostControllerWithHashMap {
        SaveAction postSavedAction = postsService.savePost(post);
 
        return ResponseEntity.created(
-               ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(postSavedAction.getPostId()).toUri())
-           .body(SavePostsResponse.response(postSavedAction.getPostId(),"Post saved"));
+               ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                       .buildAndExpand(postSavedAction.getPostId()).toUri())
+               .body(SavePostsResponse.response(String.valueOf(postSavedAction.getPostId()),"Post saved"));
     }
 
 

@@ -1,9 +1,9 @@
 package org.example.services.posts.impl;
 
-public class UpdateAction {
+public class UpdateResult {
 
     private String message;
-    public UpdateAction(String message){
+    public UpdateResult(String message){
         this.message = message;
     }
 

@@ -1,16 +1,15 @@
-package org.example.repositories.todos;
+package org.example.repositories.posts;
 
 
 import org.example.services.posts.Post;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 
-public interface PostsRepository extends CrudRepository<Post,Long> {
+public interface PostsRepository extends CrudRepository<PostEntity,Long> {
 
-    Optional<Post> findByUtilisateur(String utilisateur);
+    Optional<PostEntity> findByUtilisateur(String utilisateur);
 
    /* List<Post> getAllPosts();
 

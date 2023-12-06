@@ -1,9 +1,9 @@
 package org.example.services.posts.impl;
 
-public class DeleteAction {
+public class DeleteResult {
 
     private String message;
-    public DeleteAction(String message){
+    public DeleteResult(String message){
         this.message = message;
     }
 

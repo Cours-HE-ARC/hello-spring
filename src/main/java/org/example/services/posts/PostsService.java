@@ -1,9 +1,9 @@
 package org.example.services.posts;
 
 
-import org.example.services.posts.impl.DeleteAction;
+import org.example.services.posts.impl.DeleteResult;
 import org.example.services.posts.impl.SaveAction;
-import org.example.services.posts.impl.UpdateAction;
+import org.example.services.posts.impl.UpdateResult;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,9 +16,9 @@ public interface PostsService {
 
     Optional<Post> getPostDetailByUsername(String username);
 
-    DeleteAction deletePost(Post post);
+    DeleteResult deletePost(String id);
 
-    UpdateAction updatePost(Long id,Post post);
+    UpdateResult updatePost(Long id, Post post);
 
     SaveAction savePost(Post post);
 }
