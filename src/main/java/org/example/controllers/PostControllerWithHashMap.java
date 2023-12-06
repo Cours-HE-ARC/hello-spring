@@ -1,13 +1,14 @@
 package org.example.controllers;
 
-import org.example.repositories.todos.impl.DeleteAction;
-import org.example.repositories.todos.impl.PostAction;
-import org.example.repositories.todos.impl.UpdateAction;
-import org.example.services.todos.TodosService;
+
+import org.example.services.todos.PostsService;
 import org.example.services.posts.Post;
 import org.example.services.posts.reponse.DeletePostsResponse;
 import org.example.services.posts.reponse.SavePostsResponse;
 import org.example.services.posts.reponse.UpdatePostsResponse;
+import org.example.services.todos.impl.DeleteAction;
+import org.example.services.todos.impl.SaveAction;
+import org.example.services.todos.impl.UpdateAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,18 +22,31 @@ import java.util.*;
 public class PostControllerWithHashMap {
 
     @Autowired
-    TodosService todosService;
+    PostsService postsService;
 
     @GetMapping
     public ResponseEntity<List<Post>> getAllPosts(){
 
-        return ResponseEntity.ok(todosService.getAllPosts());
+        return ResponseEntity.ok(postsService.getAllPosts());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?>  getPostDetail(@PathVariable String id){
 
-        Optional<Post> post = todosService.getPostDetail(id);
+        Optional<Post> post = postsService.getPostDetail(Long.valueOf(id));
+
+        if(post.isPresent()){
+            return ResponseEntity.ok(post.get());
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+
+    }
+
+    @GetMapping("/user/{username}")
+    public ResponseEntity<?>  getPostDetailByUserName(@PathVariable String username){
+
+        Optional<Post> post = postsService.getPostDetailByUsername(username);
 
         if(post.isPresent()){
             return ResponseEntity.ok(post.get());
@@ -49,7 +63,9 @@ public class PostControllerWithHashMap {
 
         DeletePostsResponse response;
 
-        DeleteAction deleteAction = todosService.deletePost(id);
+        Post toDelete = postsService.getPostDetail(Long.valueOf(id)).get();
+
+        DeleteAction deleteAction = postsService.deletePost(toDelete);
         response = DeletePostsResponse.response(deleteAction.getMessage(), id);
         return ResponseEntity.ok(response);
     }
@@ -61,7 +77,7 @@ public class PostControllerWithHashMap {
 
         UpdatePostsResponse response;
 
-        UpdateAction updateAction = todosService.updatePost(id,post);
+        UpdateAction updateAction = postsService.updatePost(post);
 
         response = UpdatePostsResponse.response(id, updateAction.getMessage());
 
@@ -70,11 +86,11 @@ public class PostControllerWithHashMap {
     @PostMapping
     public ResponseEntity<SavePostsResponse> savePost(@RequestBody Post post) throws URISyntaxException {
 
-       PostAction postSavedAction = todosService.savePost(post);
+       SaveAction postSavedAction = postsService.savePost(post);
 
        return ResponseEntity.created(
-               ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(postSavedAction.getId()).toUri())
-           .body(SavePostsResponse.response(postSavedAction.getId(),"Post saved"));
+               ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(postSavedAction.getPostId()).toUri())
+           .body(SavePostsResponse.response(postSavedAction.getPostId(),"Post saved"));
     }
 
 
