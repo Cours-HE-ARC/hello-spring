@@ -2,7 +2,7 @@ package org.example.services.posts;
 
 
 import org.example.services.posts.impl.DeleteResult;
-import org.example.services.posts.impl.SaveAction;
+import org.example.services.posts.impl.SavePostAction;
 import org.example.services.posts.impl.UpdateResult;
 
 import java.util.List;
@@ -14,11 +14,10 @@ public interface PostsService {
 
     Optional<Post> getPostDetail(Long id);
 
-    Optional<Post> getPostDetailByUsername(String username);
 
     DeleteResult deletePost(String id);
 
     UpdateResult updatePost(Long id, Post post);
 
-    SaveAction savePost(Post post);
+    SavePostAction savePost(Post post, String userId);
 }

@@ -1,9 +1,12 @@
 package org.example.repositories.posts;
 
 import jakarta.persistence.*;
+import org.example.repositories.users.UserEntity;
 import org.example.services.posts.Post;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "posts")
@@ -12,6 +15,18 @@ public class PostEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
+
+    @ManyToOne
+    @JoinColumn(name="user_id", nullable=false)
+    private UserEntity user;
 
     public PostEntity() {
     }
@@ -32,18 +47,14 @@ public class PostEntity {
         return content;
     }
 
-    public String getUtilisateur() {
-        return utilisateur;
-    }
 
     private String content;
 
-    private String utilisateur;
 
-    public PostEntity(String content, String utilisateur, Date date) {
+    public PostEntity(String content, Date date, UserEntity user) {
         this.content = content;
-        this.utilisateur = utilisateur;
         this.date = date;
+        this.user = user;
     }
 
     public void setId(Long id) {
@@ -58,7 +69,5 @@ public class PostEntity {
         this.content = content;
     }
 
-    public void setUtilisateur(String utilisateur) {
-        this.utilisateur = utilisateur;
-    }
+
 }

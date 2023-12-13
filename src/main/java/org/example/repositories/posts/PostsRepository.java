@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface PostsRepository extends CrudRepository<PostEntity,Long> {
 
-    Optional<PostEntity> findByUtilisateur(String utilisateur);
+   // Optional<PostEntity> findByUtilisateurUsername(String utilisateur);
 
    /* List<Post> getAllPosts();
 

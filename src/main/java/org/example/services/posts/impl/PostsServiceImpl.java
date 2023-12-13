@@ -2,6 +2,8 @@ package org.example.services.posts.impl;
 
 import org.example.repositories.posts.PostEntity;
 import org.example.repositories.posts.PostsRepository;
+import org.example.repositories.users.UserEntity;
+import org.example.repositories.users.UserRepository;
 import org.example.services.posts.PostsService;
 import org.example.services.posts.Post;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,8 @@ public class PostsServiceImpl implements PostsService {
 
     @Autowired
     PostsRepository postsRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @Override
     public List<Post> getAllPosts() {
@@ -40,13 +44,6 @@ public class PostsServiceImpl implements PostsService {
 
     }
 
-    @Override
-    public Optional<Post> getPostDetailByUsername(String username) {
-        Optional<PostEntity> postEntity = postsRepository.findByUtilisateur(username);
-
-        return postEntity.map(Post::fromEntity);
-
-    }
 
     @Override
     public DeleteResult deletePost(String id) {
@@ -74,7 +71,7 @@ public class PostsServiceImpl implements PostsService {
             PostEntity entity = toUpdate.get();
             entity.setDate(post.getDate());
             entity.setContent(post.getContent());
-            entity.setUtilisateur(entity.getUtilisateur());
+            //entity.setUtilisateur(entity.getUtilisateur());
             postsRepository.save(entity);
             result = new UpdateResult("Post with id " + id + " successfully updated");
         }else{
@@ -85,10 +82,12 @@ public class PostsServiceImpl implements PostsService {
     }
 
     @Override
-    public SaveAction savePost(Post post) {
+    public SavePostAction savePost(Post post, String userId) {
+        UserEntity user = userRepository.findById(Long.valueOf(userId)).get();
         PostEntity postEntity = Post.toEntity(post);
+        postEntity.setUser(user);
         postEntity = postsRepository.save(postEntity);
-        return new SaveAction(
+        return new SavePostAction(
                 "Post successfully saved, id: " + postEntity.getId(),
                 Post.fromEntity(postEntity),
                 postEntity.getId());

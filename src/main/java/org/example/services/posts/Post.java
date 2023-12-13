@@ -5,8 +5,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import org.example.repositories.posts.PostEntity;
+import org.example.services.user.User;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class Post {
@@ -28,15 +31,15 @@ public class Post {
         return content;
     }
 
-    public String getUtilisateur() {
+    public User getUtilisateur() {
         return utilisateur;
     }
 
     private String content;
 
-    private String utilisateur;
+    private User utilisateur;
 
-    public Post(String content, String utilisateur, Date date) {
+    public Post(String content, User utilisateur, Date date) {
         this.content = content;
         this.utilisateur = utilisateur;
         this.date = date;
@@ -45,11 +48,12 @@ public class Post {
 
 
     public static Post fromEntity(PostEntity postEntity){
-        return new Post(postEntity.getContent(), postEntity.getUtilisateur(),postEntity.getDate());
+
+        return new Post(postEntity.getContent(), User.fromEntity(postEntity.getUser()),postEntity.getDate());
     }
 
     public static PostEntity toEntity(Post post){
-        return new PostEntity(post.getContent(), post.getUtilisateur(), post.getDate());
+        return new PostEntity(post.getContent(),  post.getDate(), null);
     }
 
 

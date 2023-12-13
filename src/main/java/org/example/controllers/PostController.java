@@ -1,14 +1,17 @@
 package org.example.controllers;
 
 
+import org.example.repositories.users.UserEntity;
 import org.example.services.posts.PostsService;
 import org.example.services.posts.Post;
 import org.example.services.posts.reponse.DeletePostsResponse;
 import org.example.services.posts.reponse.SavePostsResponse;
 import org.example.services.posts.reponse.UpdatePostsResponse;
 import org.example.services.posts.impl.DeleteResult;
-import org.example.services.posts.impl.SaveAction;
+import org.example.services.posts.impl.SavePostAction;
 import org.example.services.posts.impl.UpdateResult;
+import org.example.services.user.User;
+import org.example.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +26,8 @@ public class PostController {
 
     @Autowired
     PostsService postsService;
+    @Autowired
+    UserService userService;
 
     @GetMapping
     public ResponseEntity<List<Post>> getAllPosts(){
@@ -44,18 +49,7 @@ public class PostController {
 
     }
 
-    @GetMapping("/user/{username}")
-    public ResponseEntity<?>  getPostDetailByUserName(@PathVariable String username){
 
-        Optional<Post> post = postsService.getPostDetailByUsername(username);
-
-        if(post.isPresent()){
-            return ResponseEntity.ok(post);
-        }else{
-            return ResponseEntity.notFound().build();
-        }
-
-    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<DeletePostsResponse> deletePost(@PathVariable String id){
@@ -83,9 +77,12 @@ public class PostController {
         return ResponseEntity.ok(response);
     }
     @PostMapping
-    public ResponseEntity<SavePostsResponse> savePost(@RequestBody Post post) throws URISyntaxException {
+    public ResponseEntity<SavePostsResponse> savePost(@RequestBody SavePostRequestBody postBody) throws URISyntaxException {
 
-       SaveAction postSavedAction = postsService.savePost(post);
+
+        Post post = new Post(postBody.getContent(), null,postBody.getDate());
+
+        SavePostAction postSavedAction = postsService.savePost(post,postBody.getUserId());
 
        return ResponseEntity.created(
                ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")

@@ -2,7 +2,7 @@ package org.example.services.posts.impl;
 
 import org.example.services.posts.Post;
 
-public class SaveAction {
+public class SavePostAction {
 
     private String message;
     private Post post;
@@ -13,7 +13,7 @@ public class SaveAction {
         return postId;
     }
 
-    public SaveAction(String message, Post post, Long postId){
+    public SavePostAction(String message, Post post, Long postId){
         this.post = post;
         this.message = message;
         this.postId = postId;
